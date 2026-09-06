@@ -1,0 +1,117 @@
+.site-nav {
+  --bt-maroon: #780d31;
+  --bt-maroon-deep: #5a0a25;
+  --bt-ink: #1a1216;
+  --bt-muted: #5c5260;
+  --bt-border: rgba(120, 13, 49, 0.12);
+
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.1rem clamp(1.25rem, 4vw, 3.5rem);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--bt-border);
+  font-family: "Figtree", sans-serif;
+  box-sizing: border-box;
+}
+
+.site-nav *,
+.site-nav *::before,
+.site-nav *::after {
+  box-sizing: border-box;
+}
+
+.site-brand {
+  font-family: "Syne", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--bt-ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-brandAccent {
+  color: var(--bt-maroon);
+}
+
+.site-navLinks {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-navLinks a {
+  color: var(--bt-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.site-navLinks a:hover,
+.site-navLinks a.active {
+  color: var(--bt-maroon);
+}
+
+.site-navActions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.site-btnPrimary,
+.site-btnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.site-btnPrimary {
+  background: var(--bt-maroon);
+  color: #fff;
+  padding: 0.65rem 1.35rem;
+  box-shadow: 0 8px 24px rgba(120, 13, 49, 0.28);
+}
+
+.site-btnPrimary:hover {
+  background: var(--bt-maroon-deep);
+  transform: translateY(-1px);
+}
+
+.site-btnGhost {
+  background: transparent;
+  color: var(--bt-ink);
+  padding: 0.55rem 0.9rem;
+}
+
+.site-btnGhost:hover {
+  color: var(--bt-maroon);
+}
+
+@media (max-width: 900px) {
+  .site-navLinks {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-navActions .site-btnGhost {
+    display: none;
+  }
+}

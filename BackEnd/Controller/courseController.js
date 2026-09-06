@@ -15,14 +15,14 @@ export const createCourse = async (req, res) => {
         } = req.body;
 
         // Check instructor
-        const instructor =
-            await User.findById(instructorId);
+        // const instructor =
+        //     await User.findById(instructorId);
 
-        if (!instructor) {
-            return res.status(404).json({
-                message: "Instructor not found"
-            });
-        }
+        // if (!instructor) {
+        //     return res.status(404).json({
+        //         message: "Instructor not found"
+        //     });
+        // }
 
         const existingCourse =
             await Course.findOne({ courseCode });

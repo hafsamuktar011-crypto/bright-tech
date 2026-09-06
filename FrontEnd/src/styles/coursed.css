@@ -1,0 +1,138 @@
+.coursed-page {
+  min-height: 100vh;
+  padding: 40px 8%;
+  background: #faf7f8;
+}
+
+.coursed-backButton {
+  border: none;
+  background: transparent;
+  color: #780d31;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.coursed-backButton:hover {
+  text-decoration: underline;
+}
+
+.coursed-details {
+  max-width: 1100px;
+  margin: auto;
+  background: white;
+  border-radius: 20px;
+  padding: 50px;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 60px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.coursed-image {
+  height: 350px;
+  background: rgba(120, 13, 49, 0.06);
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.coursed-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coursed-content h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+  color: #1a1216;
+  font-family: "Syne", sans-serif;
+}
+
+.coursed-description {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #5c5260;
+}
+
+.coursed-info {
+  display: flex;
+  gap: 50px;
+  margin: 30px 0;
+}
+
+.coursed-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.coursed-info strong {
+  color: #1a1216;
+}
+
+.coursed-info span {
+  color: #5c5260;
+}
+
+.coursed-content h2 {
+  margin-top: 25px;
+  color: #1a1216;
+  font-family: "Syne", sans-serif;
+}
+
+.coursed-content ul {
+  padding-left: 20px;
+  line-height: 2;
+  color: #5c5260;
+}
+
+.coursed-startBtn {
+  margin-top: 25px;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 999px;
+  background: #780d31;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.coursed-startBtn:hover {
+  background: #5a0a25;
+}
+
+.coursed-notFound {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.coursed-notFound button {
+  margin-top: 20px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 999px;
+  background: #780d31;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .coursed-details {
+    grid-template-columns: 1fr;
+    padding: 30px;
+  }
+
+  .coursed-image {
+    height: 250px;
+  }
+
+  .coursed-content h1 {
+    font-size: 32px;
+  }
+}

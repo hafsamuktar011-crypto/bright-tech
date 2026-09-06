@@ -5,8 +5,11 @@ import {
     forgotPassword,
     resetPassword,
     updatePassword,
-    refresh,
-    logout
+    logout,
+    refreshAccessToken,
+    registerFirstAdmin,
+    
+    
 } from "../Controller/authController.js";
 
 import authMiddleware from "../Middlewares/authMiddleware.js";
@@ -27,7 +30,12 @@ authRoute.post(
 );
 
 authRoute.post(
-    "/reset-password",
+    "/forgot-password",
+    forgotPassword
+);
+
+authRoute.post(
+    "/me",
     resetPassword
 );
 
@@ -37,12 +45,22 @@ authRoute.put(
     updatePassword
 );
 
-authRoute.post(
-    "/refresh",
-    refresh
-);
+// authRoute.post(
+//     "/refresh",
+//     refresh
+// );
 
 authRoute.post(
     "/logout",
     logout
 );
+
+
+authRoute.post(
+    "/refresh-access-token",
+    refreshAccessToken
+);
+authRoute.post(
+         "/register-admin",
+         registerFirstAdmin
+     );

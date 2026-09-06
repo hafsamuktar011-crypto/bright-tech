@@ -1,0 +1,78 @@
+.staff-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .staff-container h2 {
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  
+  .staff-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  
+  .staff-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .staff-field label {
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.9rem;
+  }
+  
+  .staff-field input,
+  .staff-field select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #1e293b;
+    background-color: #f8fafc;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  .staff-field input:focus,
+  .staff-field select:focus {
+    outline: none;
+    border-color: #780d31;
+    box-shadow: 0 0 0 3px rgba(120, 13, 49, 0.15);
+    background-color: #ffffff;
+  }
+  
+  .staff-submit {
+    margin-top: 1rem;
+    padding: 0.85rem;
+    background-color: #780d31;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .staff-submit:hover {
+    background-color: #5a0a25;
+  }
+  
+  .staff-success {
+    color: green;
+  }
+  
+  .staff-error {
+    color: red;
+  }
+  

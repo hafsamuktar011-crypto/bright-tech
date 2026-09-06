@@ -36,15 +36,15 @@ const CourseSchema = z.object({
                 "Credits must be a positive number"
         }),
 
-    instructorId: z
-        .string({
-            required_error:
-                "Instructor ID is required"
-        })
-        .min(1, {
-            message:
-                "Instructor ID cannot be empty"
-        }),
+    // instructorId: z
+    //     .string({
+    //         required_error:
+    //             "Instructor ID is required"
+    //     })
+    //     .min(0, {
+    //         message:
+    //             "Instructor ID cannot be empty"
+    //     }),
 
     batchNumber: z
         .string({

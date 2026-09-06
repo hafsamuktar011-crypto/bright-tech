@@ -33,7 +33,6 @@ courseRoute.post(
     "/create",
     authMiddleware,
     isAdmin,
-    validate(CourseSchema),
     createCourse
 );
 

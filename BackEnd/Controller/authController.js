@@ -32,12 +32,16 @@ export const login = async (req, res) => {
 
         res.cookie("StudentAccessToken", accessToken, {
             httpOnly: true,
-            maxAge: 15 * 60 * 1000
+            maxAge: 15 * 60 * 1000,
+            path:"/",
+            sameSite:"lax"
         });
 
         res.cookie("StudentRefreshToken", refreshToken, {
             httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path:"/",
+            sameSite:"lax"
         });
 
         const userResponse = user.toObject();
@@ -248,4 +252,68 @@ export const logout = async (req, res) => {
     return res.status(200).json({
         message: "Logged out successfully"
     });
+};
+
+
+export const refreshAccessToken = async (req, res) => {
+  try {
+    // 1. Get refresh token from HTTP-only cookies
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json({ message: "Refresh token not found. Please log in." });
+    }
+
+    // 2. Verify the refresh token using your secret
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+    // 3. Generate a new short-lived access token
+    const newAccessToken = jwt.sign(
+      { id: decoded.id, role: decoded.role },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '15m' }
+    );
+
+    // 4. Send back the new access token
+    res.status(200).json({ accessToken: newAccessToken });
+  } catch (error) {
+    res.status(403).json({ message: "Invalid or expired refresh token." });
+  }
+};
+export const registerFirstAdmin = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // 1. Check if ANY admin user already exists in the database
+    const existingAdmin = await User.findOne({ role: 'admin' });
+
+    // 2. Determine the role based on whether an admin exists
+    // If an admin exists, block this endpoint or default to 'student'
+    let assignedRole = 'student';
+    if (!existingAdmin) {
+      assignedRole = 'admin'; // This is the very first user!
+    } else {
+      return res.status(403).json({ 
+        message: "Admin registration is closed. An administrator already exists." 
+      });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role: assignedRole
+    });
+
+    await newUser.save();
+
+    res.status(201).json({ 
+      success: true, 
+      message:` First admin account successfully created for ${email}.` 
+    });
+
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 };

@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import cors from "cors"
+import cors from "cors";
 import DBConnect from "./Config/dbConfig.js";
 
 import { userRoute } from "./Router/user.route.js";
@@ -22,6 +22,7 @@ app.use(
         credentials:true,
     })
 );
+
 // Routes
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);

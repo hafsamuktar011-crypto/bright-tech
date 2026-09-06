@@ -39,7 +39,7 @@ paymentRoute.put(
 
 
 paymentRoute.get(
-    "/get",
+    "/",
     authMiddleware,
     isAdmin,
     getAllPayments

@@ -3,6 +3,7 @@ import User from "../Model/usersModel.js";
 
 function authMiddleware(req, res, next) {
     const token = req.cookies.StudentAccessToken;
+    console.log(token)
 
     if (!token) {
         return res.status(401).json({
@@ -28,7 +29,7 @@ function authMiddleware(req, res, next) {
 
 export const isAdmin = async (req, res, next) => {
     try {
-        const userId = req.user._id;
+        const userId = req.user.id;
 
         const user = await User
             .findById(userId)
@@ -54,5 +55,24 @@ export const isAdmin = async (req, res, next) => {
         });
     }
 };
+
+const verifyAccessToken = async (req, res, next) => {
+    const AuthHeader = req.headers.authorization;
+    if(!AuthHeader || !AuthHeader.startsWith("Bearer ")) {
+        return res.status(401).json({message: "Unauthorized"})
+    }
+    const token = AuthHeader.split(" ")[1];
+    if(!token) {
+        return res.status(401).json({message: "access missing or invalid"})
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        //attach the user to the request object
+        req.user = decoded;
+        next();
+    } catch (error) {
+        return res.status(401).json({message: "token missing or invalid or expired"})
+    }
+}
 
 export default authMiddleware;
