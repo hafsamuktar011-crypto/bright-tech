@@ -13,7 +13,7 @@ import ManageCourses from './pages/Admin/ManageCourses.jsx'
 import PaymentManagement from './pages/Admin/PaymentManagement.jsx'
 import Footer from './components/Footer.jsx'
 import WelcomePage from './pages/WelcomePage/welcomePage.jsx'
-
+import ForgotPassword from './components/ForgotPassword.jsx'
 import RegisterAdmin from './pages/RegisterAdmin.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
@@ -32,6 +32,7 @@ function AppContent() {
         {/* {Authentication Pages} */}
         <Route path='/welcome' element={<WelcomePage/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/forgot-password' element={<ForgotPassword/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/register-admin' element={<RegisterAdmin/>}/>
         {/* {Admin Page} */}

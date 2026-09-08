@@ -60,9 +60,9 @@ function Login() {
 
           {error && <p className="login-error">{error}</p>}
 
-          <a href="#" className="login-forgot">
+          <Link to="/forgot-password" className="login-forgot">
             Forgot password?
-          </a>
+          </Link>
 
           <button type="submit" className="login-submit" disabled={loading}>
             {loading ? "Logging in..." : "Log In"}

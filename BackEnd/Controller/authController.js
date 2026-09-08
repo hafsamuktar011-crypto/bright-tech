@@ -72,15 +72,12 @@ export const forgotPassword = async (req, res) => {
             });
         }
 
-        // Reset token is a short-lived JWT so resetPassword can
-        // verify it with jwt.verify and recover the user id.
         const resetToken = jwt.sign(
             { id: user._id },
             process.env.JWT_SECRET,
             { expiresIn: "15m" }
         );
 
-        // Save reset token
         user.passwordResetToken = resetToken;
         user.passwordResetExpires = Date.now() + 15 * 60 * 1000;
 
@@ -281,16 +278,15 @@ export const refreshAccessToken = async (req, res) => {
 };
 export const registerFirstAdmin = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const {fullName,emailAddress, password,phone,birthDate,academicBackground,gender } = req.body;
 
-    // 1. Check if ANY admin user already exists in the database
+    
     const existingAdmin = await User.findOne({ role: 'admin' });
 
-    // 2. Determine the role based on whether an admin exists
-    // If an admin exists, block this endpoint or default to 'student'
+    
     let assignedRole = 'student';
     if (!existingAdmin) {
-      assignedRole = 'admin'; // This is the very first user!
+      assignedRole = 'admin'; 
     } else {
       return res.status(403).json({ 
         message: "Admin registration is closed. An administrator already exists." 
@@ -300,20 +296,26 @@ export const registerFirstAdmin = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
-      name,
-      email,
+        fullName,
+        emailAddress,
+         password,
+         phone,
+         birthDate,
+         academicBackground,
+         gender,
       password: hashedPassword,
-      role: assignedRole
+      role: assignedRole,
     });
 
     await newUser.save();
 
     res.status(201).json({ 
       success: true, 
-      message:` First admin account successfully created for ${email}.` 
+      message:` First admin account successfully created for ${emailAddress}.` 
     });
 
   } catch (error) {
+    console.error("Register admin error:",error)
     res.status(500).json({ success: false, error: error.message });
   }
 };

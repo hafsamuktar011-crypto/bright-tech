@@ -29,10 +29,7 @@ authRoute.post(
     forgotPassword
 );
 
-authRoute.post(
-    "/forgot-password",
-    forgotPassword
-);
+
 
 authRoute.post(
     "/me",

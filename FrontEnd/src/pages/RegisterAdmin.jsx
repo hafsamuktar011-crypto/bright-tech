@@ -5,9 +5,13 @@ import "../styles/register.css";
 
 export default function RegisterAdmin() {
  const [formData, setFormData] = useState({
- name: "",
- email: "",
+ fullName: "",
+ emailAddress: "",
  password: "",
+ phone:"",
+ gender:"",
+ birthDate:"",
+ academicBackground:""
  });
  const [message, setMessage] = useState("");
  const [isSuccess, setIsSuccess] = useState(false);
@@ -29,7 +33,7 @@ export default function RegisterAdmin() {
  formData
 );
 
-setMessage(response.data.message , "Admin account successfully created!");
+setMessage(response.data.message || "Admin account successfully created!");
 setIsSuccess(true);
 
  setTimeout(() => {
@@ -38,7 +42,7 @@ setIsSuccess(true);
  } catch (error) {
 setIsSuccess(false);
  setMessage(
- error.response?.data?.message ,"Something went wrong during registration.");
+ error.response?.data?.message ||"Something went wrong during registration.");
  } finally {
  setLoading(false);
  }
@@ -61,8 +65,8 @@ setIsSuccess(false);
  <label>Full Name</label>
  <input
  type="text"
- name="name"
- value={formData.name}
+ name="fullName"
+ value={formData.fullName}
  onChange={handleChange}
  placeholder="Enter admin name"
  required
@@ -73,8 +77,8 @@ setIsSuccess(false);
  <label>Email Address</label>
  <input
  type="email"
- name="email"
- value={formData.email}
+ name="emailAddress"
+ value={formData.emailAddress}
  onChange={handleChange}
  placeholder="admin@example.com"
  required
@@ -92,8 +96,53 @@ value={formData.password}
  required
  />
  </div>
+ <div className="register-inputGroup register-fullWidth">
+ <label>phone</label>
+ <input
+ type="tel"
+ name="phone"
+value={formData.phone}
+ onChange={handleChange}
+ placeholder="Enter your phone"
+ required
+ />
+ </div>
+ <div className="register-inputGroup register-fullWidth">
+   <label>Gender</label>
+     <select name="gender" value={formData.gender} onChange={handleChange} required >
+       <option value="">Select your Gender</option>
+       <option value="male">Male</option>
+       <option value="female">Female</option>
+     </select>
+ </div>
+ <div className="register-inputGroup register-fullWidth">
+ <label>BirthDate</label>
+ <input
+ type="date"
+ name="birthDate"
+value={formData.birthDate}
+ onChange={handleChange}
+ placeholder="Enter your birthDate"
+ required
+ />
+ <label>AcademicBackground</label>
+ <select
+ name="academicBackground"
+value={formData.academicBackground}
+ onChange={handleChange}
+ placeholder="Enter your academicBackground"
+ required
+ >
+   <option value="">Select your academic background</option>
+   <option value="Bachelor's Degree">Bachelor's Degree</option>
+   <option value="Master's Degree">Master's Degree</option>
+   <option value="Ph.D.">Ph.D.</option>
+
+ </select>
  </div>
  </div>
+ </div>
+ 
 
  {message && (
  <p className={isSuccess ? "register-success" : "register-error"}>
@@ -101,9 +150,9 @@ value={formData.password}
  </p>
  )}
 
- <button type="submit" className="register-submit" disabled={loading}>
- {loading ? "Creating admin..." : "Create Master Admin"}
- </button>
+   <button type="submit" className="register-submit" disabled={loading}>
+       {loading ? "Creating admin..." : "Create Master Admin"}
+   </button>
 </form>
  <p className="register-footer">
  Already have an account? <Link to="/login">Log in</Link>
