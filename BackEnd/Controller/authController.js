@@ -254,7 +254,7 @@ export const logout = async (req, res) => {
 
 export const refreshAccessToken = async (req, res) => {
   try {
-    // 1. Get refresh token from HTTP-only cookies
+    
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
       return res.status(401).json({ message: "Refresh token not found. Please log in." });
@@ -270,7 +270,7 @@ export const refreshAccessToken = async (req, res) => {
       { expiresIn: '15m' }
     );
 
-    // 4. Send back the new access token
+    
     res.status(200).json({ accessToken: newAccessToken });
   } catch (error) {
     res.status(403).json({ message: "Invalid or expired refresh token." });
