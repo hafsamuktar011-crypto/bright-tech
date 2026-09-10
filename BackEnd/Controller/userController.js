@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../Model/usersModel.js";
 import toSafeUser from "../utils/toSafeUser.js";
+import sendEmail from "../utils/sendEmail.js";
 
 
 export const register = async (req, res) => {
@@ -155,10 +156,10 @@ export const registerUserByAdmin =async (req,res) => {
             ...otherData
         } = req.body;
 
-      const allowedRoles = ["instructor", "admin"];
+      const allowedRoles = ["instructor", "student"];
       if (!allowedRoles.includes(role)) {
         return res.status(400).json({
-          message: "Role must be instructor or admin"
+          message: "Role must be instructor or student"
         });
       }
 
@@ -167,15 +168,24 @@ export const registerUserByAdmin =async (req,res) => {
       if(existUser){
         return res.status(400).json({message:"User with this email or phone already exists"})
       } 
-      const hashedPassword =await bcrypt.hash(password,10)
+      const tempPassword=Math.random().toString(36).slice(-8)
+      const hashedPassword =await bcrypt.hash(tempPassword,10)
       const newUser =await User.create({
             emailAddress,
             phone,
             password:hashedPassword,
-            ...otherData,
-            role
+            role,
+            ...otherData
+            
 });
-return res.status(201).json({message:"User registered successfully",user:toSafeUser(newUser)})
+ const mailOptions ={
+    from:process.env.EMIL_USER,
+    to:emailAddress,
+    subject:"Your Account Credentials",
+    text:`Hello,\n\nYour account has been successfully created.Your temporary password is:${tempPassword}\n\nPlease log in and update your password immediately. `
+ };
+ await WebTransportError.sendMail(mailOptions);
+return res.status(201).json({message:"User registered successfully and temporary password sent via email",user:toSafeUser(newUser)})
     } catch (error) {
         res.status(500).json({message:error.message})
     }

@@ -38,7 +38,6 @@ function RegisterStaff() {
         gender:"male",
         academicBackground:"",
         selectSupportType:["Online"],
-        password:"",
         role:"instructor",
             })
             console.log(res.data)
@@ -48,7 +47,7 @@ function RegisterStaff() {
     }
   return (
     <div className="register-staff-container">
-        <h2>Register Staff</h2>
+        <h2>Register User</h2>
         {message && <p className="register-staff-success" style={{color:"green"}}>{message}</p>}
         {error && <p className="register-staff-error" style={{color:"red"}}>{error}</p>}
         <form className="register-staff-form" onSubmit={handleSubmit}>
@@ -66,7 +65,7 @@ function RegisterStaff() {
          </div>
           <div className="register-staff-field">
             <label>Birth Date:</label>
-            <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} required />
+            <input type="date" name="birthDate" max="2010-12-31" value={formData.birthDate} onChange={handleChange} required />
          </div>
          <div className="register-staff-field">
             <label>Gender:</label>
@@ -78,7 +77,19 @@ function RegisterStaff() {
          </div>
           <div className="register-staff-field">
             <label>Academic Background:</label>
-            <input type="text" name="academicBackground" value={formData.academicBackground} onChange={handleChange} required />
+            <select 
+    name="academicBackground" 
+    value={formData.academicBackground} 
+    onChange={handleChange}
+    required
+  >
+    <option value="">Select Academic Background</option>
+    <option value="High School">High School</option>
+    <option value="Diploma">Diploma</option>
+    <option value="Bachelor">Bachelor's Degree</option>
+    <option value="Master">Master's Degree</option>
+    <option value="Other">Other</option>
+  </select>
          </div>
           <div className="register-staff-field">
             <label>Support Type:</label>
@@ -93,14 +104,11 @@ function RegisterStaff() {
             <label>Role:</label>
             <select name="role" value={formData.role} onChange={handleChange}>
                 <option value="instructor">Instructor</option>
-                <option value="admin">Admin</option>
+                <option value="student">Student</option>
             </select>
          </div>
-          <div className="register-staff-field register-staff-field--full">
-            <label>Password:</label>
-            <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-         </div>
-         <button className="register-staff-submit" type="submit">Register Staff Member</button>
+          
+         <button className="register-staff-submit" type="submit">Add New const [state, dispatch] = useReducer(first, second, third)ser</button>
         </form>
 
     </div>

@@ -1,8 +1,9 @@
 
-import { Navigate } from 'react-router-dom';
-import { useUserContext } from '../../contexts/UserContext.jsx'; 
+import { Navigate,Outlet } from 'react-router-dom';
+import { useUserContext } from '../../contexts/usercontext'; 
+import { getStudentDashboardPath} from "../../pages/Student/studentPath.js";
 
-export default function ProtectedRoute({ children, adminOnly = false }) {
+export default function ProtectedRoute({ children, adminOnly = false,allowedRoles }) {
   const { user } = useUserContext(); 
 
   
