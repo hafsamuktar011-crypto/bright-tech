@@ -70,6 +70,7 @@ body {
 #root:has(.login-page),
 #root:has(.register-page),
 #root:has(.admin-layout),
+#root:has(.student-layout),
 #root:has(.about-page),
 #root:has(.courses-page),
 #root:has(.welcome-page),

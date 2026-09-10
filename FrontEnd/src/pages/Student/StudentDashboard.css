@@ -1,0 +1,208 @@
+.student-layout {
+  --bt-maroon: #780d31;
+  --bt-maroon-deep: #5a0a25;
+  --bt-maroon-soft: rgba(120, 13, 49, 0.1);
+  --bt-ink: #1a1216;
+  --bt-muted: #5c5260;
+  --bt-border: rgba(120, 13, 49, 0.12);
+  --bt-surface: #f7f4f5;
+  --bt-card: #ffffff;
+  --font-display: "Syne", sans-serif;
+  --font-body: "Figtree", sans-serif;
+
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background:
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(120, 13, 49, 0.07), transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, var(--bt-surface) 100%);
+  color: var(--bt-ink);
+  font-family: var(--font-body);
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.student-layout *,
+.student-layout *::before,
+.student-layout *::after {
+  box-sizing: border-box;
+}
+
+.student-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 1.75rem 1.25rem;
+  background: var(--bt-card);
+  border-right: 1px solid var(--bt-border);
+  box-shadow: 8px 0 30px rgba(26, 18, 22, 0.04);
+}
+
+.student-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem 0.85rem;
+  border-bottom: 1px solid var(--bt-border);
+}
+
+.student-brandMark {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--bt-ink);
+  text-decoration: none;
+}
+
+.student-brandMark span {
+  color: var(--bt-maroon);
+}
+
+.student-brandSub {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bt-muted);
+}
+
+.student-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.student-navLabel {
+  margin: 0 0.5rem 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bt-muted);
+}
+
+.student-navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  color: var(--bt-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.student-navLink:hover {
+  background: var(--bt-maroon-soft);
+  color: var(--bt-maroon);
+}
+
+.student-navLink.active {
+  background: var(--bt-maroon);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(120, 13, 49, 0.28);
+}
+
+.student-navDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+
+.student-navLink.active .student-navDot {
+  opacity: 1;
+  background: #fff;
+}
+
+.student-sidebarFoot {
+  margin-top: auto;
+  padding: 1rem;
+  border-radius: 16px;
+  background: var(--bt-maroon-soft);
+  border: 1px solid var(--bt-border);
+}
+
+.student-sidebarFoot p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--bt-muted);
+  line-height: 1.45;
+}
+
+.student-sidebarFoot strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--bt-maroon);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+}
+
+.student-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-panel {
+  padding: 1.75rem clamp(1.25rem, 3vw, 2.5rem) 2.5rem;
+  animation: student-rise 0.45s ease both;
+}
+
+.student-headerCopy h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 3vw, 2.45rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--bt-ink);
+}
+
+.student-headerCopy p {
+  margin: 0.4rem 0 0;
+  color: var(--bt-muted);
+  font-size: 1rem;
+  max-width: 36rem;
+}
+
+@keyframes student-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .student-layout {
+    flex-direction: column;
+  }
+
+  .student-sidebar {
+    width: 100%;
+    box-shadow: none;
+    border-right: none;
+    border-bottom: 1px solid var(--bt-border);
+  }
+
+  .student-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .student-sidebarFoot {
+    display: none;
+  }
+}
