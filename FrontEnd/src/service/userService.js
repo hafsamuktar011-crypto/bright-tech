@@ -11,3 +11,7 @@ export const registerStaff = (staffData) => {
 export const getStudents = () => {
   return api.get("/user/students-list");
 };
+
+export const getInstructors = () => {
+  return api.get("/user/instructors-list");
+};

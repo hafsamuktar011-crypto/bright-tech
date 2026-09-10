@@ -1,6 +1,7 @@
 import { NavLink, Navigate, Outlet, useLocation, useParams } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext.jsx";
 import { getStudentDashboardPath, toStudentSlug } from "./studentPath.js";
+import StudentPayments from "./StudentPayments.jsx";
 import "./StudentDashboard.css";
 
 const navItems = [
@@ -25,10 +26,16 @@ function StudentSection({ title, lead }) {
 
 export function StudentOverview() {
   return (
-    <StudentSection
-      title="Dashboard"
-      lead="This is the starting view of your student workspace. Section content will be added here later."
-    />
+    <section className="student-panel">
+      <header className="student-header">
+        <div className="student-headerCopy">
+          <h1>Dashboard</h1>
+          <p>Your student dashboard information.</p>
+        </div>
+      </header>
+
+      <StudentPayments />
+    </section>
   );
 }
 

@@ -1,7 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { legacyCreateColumnHelper } from "@tanstack/react-table/legacy";
-import { api } from "../../service/axiosInstance";
 import DataTable from "../../components/admin/DataTable";
+import {
+  formatPaymentStatus,
+  getAllPayments,
+  getCourseIdDisplay,
+  paymentStatusClass,
+  reviewPayment,
+} from "../../service/paymentService.js";
 import "./AdminShared.css";
 import "./PaymentManagement.css";
 
@@ -18,7 +24,7 @@ function PaymentManagement() {
     const loadPayments = async () => {
       try {
         setLoading(true);
-        const res = await api.get("/payment");
+        const res = await getAllPayments();
         const rows = res.data?.data ?? res.data ?? [];
         setPayments(Array.isArray(rows) ? rows : []);
       } catch (err) {
@@ -30,27 +36,32 @@ function PaymentManagement() {
     loadPayments();
   }, []);
 
-  const handleReview = async (id, status) => {
+  const handleReview = useCallback(async (id, status) => {
     setMessage("");
     setError("");
     try {
-      await api.patch(`/payment/${id}`, { status });
+      await reviewPayment(id, status);
       setPayments((prev) =>
         prev.map((payment) =>
           payment._id === id ? { ...payment, status } : payment
         )
       );
-      setMessage(`Payment ${status} successfully.`);
+      setMessage(`Payment ${formatPaymentStatus(status).toLowerCase()} successfully.`);
     } catch (err) {
       setError(
         err.response?.data?.message || err.message || "Failed to update payment status"
       );
     }
-  };
+  }, []);
 
   const visiblePayments = useMemo(() => {
     if (statusFilter === "all") return payments;
-    return payments.filter((p) => p.status === statusFilter);
+    return payments.filter((p) => {
+      if (statusFilter === "rejected") {
+        return p.status === "rejected" || p.status === "denied";
+      }
+      return p.status === statusFilter;
+    });
   }, [payments, statusFilter]);
 
   const columns = useMemo(
@@ -66,77 +77,52 @@ function PaymentManagement() {
         ),
       }),
       columnHelper.display({
-        id: "course",
-        header: "Course",
-        cell: ({ row }) => (
-          <div className="admin-cellStack">
-            <strong>{row.original.courseId?.courseName || "Unknown"}</strong>
-            <small>{row.original.courseId?.courseCode || "—"}</small>
-          </div>
-        ),
+        id: "courseId",
+        header: "Course ID",
+        cell: ({ row }) => getCourseIdDisplay(row.original.courseId),
       }),
       columnHelper.accessor("coursePrice", { header: "Course Price" }),
-      columnHelper.accessor("amount", { header: "Amount Paid" }),
-      columnHelper.accessor("paymentType", { header: "Type" }),
-      columnHelper.accessor("paymentMethod", { header: "Method" }),
+      columnHelper.accessor("amount", { header: "Amount" }),
       columnHelper.accessor("transactionId", {
         header: "Transaction ID",
         cell: (info) => info.getValue() || "—",
       }),
       columnHelper.display({
-        id: "receipt",
-        header: "Receipt",
-        cell: ({ row }) =>
-          row.original.receiptUrl ? (
-            <a
-              className="admin-link"
-              href={row.original.receiptUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              View
-            </a>
-          ) : (
-            "—"
-          ),
-      }),
-      columnHelper.accessor("status", {
+        id: "status",
         header: "Status",
-        cell: (info) => (
-          <span
-            className={`admin-statusBadge admin-statusBadge--${info.getValue() || "pending"}`}
-          >
-            {info.getValue()}
-          </span>
-        ),
-      }),
-      columnHelper.display({
-        id: "actions",
-        header: "Actions",
-        cell: ({ row }) =>
-          row.original.status === "pending" ? (
-            <div className="admin-rowActions">
-              <button
-                type="button"
-                className="admin-approveBtn"
-                onClick={() => handleReview(row.original._id, "approved")}
+        cell: ({ row }) => {
+          const status = row.original.status;
+          return (
+            <div className="admin-cellStack">
+              <span
+                className={`admin-statusBadge admin-statusBadge--${paymentStatusClass(status)}`}
               >
-                Approve
-              </button>
-              <button
-                type="button"
-                className="admin-dangerBtn"
-                onClick={() => handleReview(row.original._id, "denied")}
-              >
-                Deny
-              </button>
+                {formatPaymentStatus(status)}
+              </span>
+              {status === "pending" ? (
+                <div className="admin-rowActions">
+                  <button
+                    type="button"
+                    className="admin-approveBtn"
+                    onClick={() => handleReview(row.original._id, "approved")}
+                  >
+                    Approve
+                  </button>
+                  <button
+                    type="button"
+                    className="admin-dangerBtn"
+                    onClick={() => handleReview(row.original._id, "rejected")}
+                  >
+                    Reject
+                  </button>
+                </div>
+              ) : null}
             </div>
-          ) : (
-            <small>Reviewed</small>
-          ),
+          );
+        },
       }),
     ],
-    []
+    [handleReview]
   );
 
   return (
@@ -156,7 +142,7 @@ function PaymentManagement() {
           <option value="all">All statuses</option>
           <option value="pending">Pending</option>
           <option value="approved">Approved</option>
-          <option value="denied">Denied</option>
+          <option value="rejected">Rejected</option>
         </select>
       </div>
 

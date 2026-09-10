@@ -18,15 +18,9 @@ export const PaymentSchema = z.object({
         }),
 
     transactionId: z
-        .string({
-            required_error:
-                "Transaction ID is required"
-        })
+        .string()
         .trim()
-        .min(5, {
-            message:
-                "Transaction ID must be at least 5 characters"
-        }),
+        .optional(),
 
     courseId: z
         .string({
@@ -56,4 +50,32 @@ export const PaymentSchema = z.object({
     receiptUrl: z
         .string()
         .optional()
+}).superRefine((data, ctx) => {
+    if (data.paymentMethod !== "Transfer") {
+        return;
+    }
+
+    if (!data.transactionId) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["transactionId"],
+            message: "Transaction ID is required"
+        });
+        return;
+    }
+
+    if (data.transactionId.length < 5) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["transactionId"],
+            message: "Transaction ID must be at least 5 characters"
+        });
+    }
+}).transform((data) => {
+    if (data.paymentMethod !== "Cash") {
+        return data;
+    }
+
+    const { transactionId, ...cashPayment } = data;
+    return cashPayment;
 });

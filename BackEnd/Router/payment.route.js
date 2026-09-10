@@ -7,7 +7,8 @@ import authMiddleware, {
 import {
     studentSubmitPayment,
     reviewPayment,
-    getAllPayments
+    getAllPayments,
+    getMyPayments
 } from "../Controller/paymentController.js";
 
 import {
@@ -37,6 +38,11 @@ paymentRoute.put(
     reviewPayment
 );
 
+paymentRoute.get(
+    "/my-payments",
+    authMiddleware,
+    getMyPayments
+);
 
 paymentRoute.get(
     "/",

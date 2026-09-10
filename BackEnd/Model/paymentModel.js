@@ -39,7 +39,10 @@ const paymentSchema = new mongoose.Schema(
         transactionId: {
             type: String,
             unique: true,
-            required: true,
+            sparse: true,
+            required: function () {
+                return this.paymentMethod === "Transfer";
+            },
             trim: true
         },
 
@@ -49,11 +52,7 @@ const paymentSchema = new mongoose.Schema(
 
         status: {
             type: String,
-            enum: [
-                "pending",
-                "approved",
-                "denied"
-            ],
+            enum: ["pending", "approved", "rejected"],
             default: "pending"
         },
 

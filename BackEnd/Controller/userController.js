@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import User from "../Model/usersModel.js";
+import toSafeUser from "../utils/toSafeUser.js";
 
 
 export const register = async (req, res) => {
@@ -8,6 +9,10 @@ export const register = async (req, res) => {
             emailAddress,
             password,
             phone,
+            role,
+            status,
+            passwordResetToken,
+            passwordResetExpires,
             ...otherData
         } = req.body;
 
@@ -19,8 +24,12 @@ export const register = async (req, res) => {
         });
 
         if (existingUser) {
+            const field =
+                existingUser.emailAddress === emailAddress
+                    ? "Email"
+                    : "Phone";
             return res.status(400).json({
-                message: "Email or phone already exists"
+                message: `${field} already exists`
             });
         }
 
@@ -31,17 +40,13 @@ export const register = async (req, res) => {
             ...otherData,
             emailAddress,
             phone,
-            password: hashedPassword
+            password: hashedPassword,
+            role: "student"
         });
-
-        const userResponse =
-            newUser.toObject();
-
-        delete userResponse.password;
 
         return res.status(201).json({
             message: "User registered successfully",
-            data: userResponse
+            data: toSafeUser(newUser)
         });
 
     } catch (error) {
@@ -121,14 +126,42 @@ export const getAllStudents = async (req, res) => {
         });
     }
 };
+
+export const getAllInstructors = async (req, res) => {
+    try {
+        const instructors = await User
+            .find({ role: "instructor" })
+            .select("-password -passwordResetToken -passwordResetExpires");
+
+        return res.status(200).json({
+            data: instructors
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
 export const registerUserByAdmin =async (req,res) => {
     try {
         const {
             emailAddress,
             password,
             phone,
+            role,
+            passwordResetToken,
+            passwordResetExpires,
             ...otherData
         } = req.body;
+
+      const allowedRoles = ["instructor", "admin"];
+      if (!allowedRoles.includes(role)) {
+        return res.status(400).json({
+          message: "Role must be instructor or admin"
+        });
+      }
+
       const existUser=await User.findOne({$or:[{emailAddress:emailAddress},{phone:phone}]
     });
       if(existUser){
@@ -139,22 +172,40 @@ export const registerUserByAdmin =async (req,res) => {
             emailAddress,
             phone,
             password:hashedPassword,
-            ...otherData       
+            ...otherData,
+            role
 });
-return res.status(201).json({message:"User registered successfully",user:newUser})
+return res.status(201).json({message:"User registered successfully",user:toSafeUser(newUser)})
     } catch (error) {
         res.status(500).json({message:error.message})
     }
 }
 
-export const getMe=async (req,res) => {
-    //user get from verifyAccessToken middleware
-try {
-    const user =await user.findById(req.user.id).select("-password");
-    if(!user){
-        return res.status(404).json({message:"User not found"})
-    }return res.status(200).json({message:"User found",user:user})
-}catch (error) {
-        return res.status(500).json({message:error.message + "server error"})
+export const getStudent = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select(
+            "-password -passwordResetToken -passwordResetExpires"
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        if (user.role !== "student") {
+            return res.status(403).json({
+                message: "Access denied. Student only."
+            });
+        }
+
+        return res.status(200).json({
+            message: "Student found",
+            user: toSafeUser(user)
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message || "Server error"
+        });
     }
-}
+};
