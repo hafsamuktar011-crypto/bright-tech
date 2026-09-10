@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/Auth/ForgotPassword.jsx";
 import WelcomePage from "./pages/Welcome/WelcomePage.jsx";
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 import StudentsList from "./pages/Admin/StudentsList.jsx";
+import InstructorsList from "./pages/Admin/InstructorsList.jsx";
 import RegisterStaff from "./pages/Admin/RegisterStaff.jsx";
 import PaymentManagement from "./pages/Admin/PaymentManagement.jsx";
 import ManageCourses from "./pages/Admin/ManageCourses.jsx";
@@ -51,6 +52,7 @@ function AppContent() {
             <Route index element={<Navigate to="students" replace />} />
             <Route path="register-staff" element={<RegisterStaff />} />
             <Route path="students" element={<StudentsList />} />
+            <Route path="instructors" element={<InstructorsList />} />
             <Route path="payments" element={<PaymentManagement />} />
             <Route path="courses" element={<ManageCourses />} />
           </Route>
@@ -62,6 +64,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           >
+            
             <Route index element={<StudentOverview />} />
             <Route path="assignments" element={<StudentAssignments />} />
             <Route path="courses" element={<StudentCoursesPanel />} />

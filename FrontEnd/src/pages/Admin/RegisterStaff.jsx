@@ -49,26 +49,26 @@ function RegisterStaff() {
   return (
     <div className="register-staff-container">
         <h2>Register Staff</h2>
-        {message && <p style={{color:"green"}}>{message}</p>}
-        {error && <p style={{color:"red"}}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-         <div>
+        {message && <p className="register-staff-success" style={{color:"green"}}>{message}</p>}
+        {error && <p className="register-staff-error" style={{color:"red"}}>{error}</p>}
+        <form className="register-staff-form" onSubmit={handleSubmit}>
+         <div className="register-staff-field">
             <label>Full Name:</label>
             <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required />
          </div>
-          <div>
+          <div className="register-staff-field">
             <label>Email Address:</label>
             <input type="email" name="emailAddress" value={formData.emailAddress} onChange={handleChange} required />
          </div>
-          <div>
+          <div className="register-staff-field">
             <label>Phone:</label>
             <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+251..." required />
          </div>
-          <div>
+          <div className="register-staff-field">
             <label>Birth Date:</label>
             <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} required />
          </div>
-         <div>
+         <div className="register-staff-field">
             <label>Gender:</label>
             <select name="gender" value={formData.gender} onChange={handleChange}>
                 <option value="male">Male</option>
@@ -76,11 +76,11 @@ function RegisterStaff() {
 
             </select>
          </div>
-          <div>
+          <div className="register-staff-field">
             <label>Academic Background:</label>
             <input type="text" name="academicBackground" value={formData.academicBackground} onChange={handleChange} required />
          </div>
-          <div>
+          <div className="register-staff-field">
             <label>Support Type:</label>
             <select name="selectSupportType" value={formData.selectSupportType} onChange={handleChange}>
                 <option value="Online">Online</option>
@@ -89,20 +89,18 @@ function RegisterStaff() {
                 
             </select>
          </div>
-         <div>
+         <div className="register-staff-field">
             <label>Role:</label>
             <select name="role" value={formData.role} onChange={handleChange}>
                 <option value="instructor">Instructor</option>
-                <option value="registrar">Registrar</option>
-                <option value="finance">Finance</option>
                 <option value="admin">Admin</option>
             </select>
          </div>
-          <div>
+          <div className="register-staff-field register-staff-field--full">
             <label>Password:</label>
             <input type="password" name="password" value={formData.password} onChange={handleChange} required />
          </div>
-         <button type="submit">Register Staff Member</button>
+         <button className="register-staff-submit" type="submit">Register Staff Member</button>
         </form>
 
     </div>

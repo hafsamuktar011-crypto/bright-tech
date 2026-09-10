@@ -1,6 +1,6 @@
 import express from "express";
 
-import {register,viewUser,updateUser,getAllStudents,registerUserByAdmin,getMe
+import {register,viewUser,updateUser,getAllStudents,getAllInstructors,registerUserByAdmin,getStudent
 } from "../Controller/userController.js";
 
 import authMiddleware, { isAdmin} from "../Middlewares/authMiddleware.js";
@@ -8,8 +8,6 @@ import authMiddleware, { isAdmin} from "../Middlewares/authMiddleware.js";
 import RegistrationSchema from "../Schema/RegistrationSchema.js";
 
 import { validate }from "../Middlewares/validate.js";
-
-import verifyAccessToken from "../Middlewares/authMiddleware.js";
 
 
 export const userRoute =
@@ -45,6 +43,12 @@ userRoute.get(
     isAdmin,
     getAllStudents
 );
+userRoute.get(
+    "/instructors-list",
+    authMiddleware,
+    isAdmin,
+    getAllInstructors
+);
 userRoute.post(
     "/register-staff",
     authMiddleware,
@@ -52,6 +56,8 @@ userRoute.post(
     registerUserByAdmin
 );
 
-userRoute.get('/me',
-     verifyAccessToken,
-     getMe);
+userRoute.get(
+    "/student",
+    authMiddleware,
+    getStudent
+);

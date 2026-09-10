@@ -29,7 +29,12 @@ useEffect(() => {
         async(error) =>{
             const originalRequest =error.config;
 
-            if((error.response?.status===401 || error.response?.status===403) && !originalRequest._retry)
+            if (
+                (error.response?.status === 401 || error.response?.status === 403) &&
+                !originalRequest._retry &&
+                !String(originalRequest?.url || "").includes("/auth/refresh-access-token") &&
+                !String(originalRequest?.url || "").includes("/auth/login")
+            )
             {
                 originalRequest._retry=true
                 try {

@@ -5,6 +5,7 @@ import User from "../Model/usersModel.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
 import sendEmail from "../utils/sendEmail.js";
+import toSafeUser from "../utils/toSafeUser.js";
 
 
 export const login = async (req, res) => {
@@ -27,8 +28,8 @@ export const login = async (req, res) => {
             });
         }
 
-        const accessToken = generateAccessToken(user._id, user.role);
-        const refreshToken = generateRefreshToken(user._id, user.role);
+        const accessToken = generateAccessToken(String(user._id), user.role);
+        const refreshToken = generateRefreshToken(String(user._id), user.role);
 
         res.cookie("StudentAccessToken", accessToken, {
             httpOnly: true,
@@ -44,12 +45,9 @@ export const login = async (req, res) => {
             sameSite:"lax"
         });
 
-        const userResponse = user.toObject();
-        delete userResponse.password;
-
         return res.status(200).json({
             message: "Login successful",
-            user: userResponse
+            user: toSafeUser(user)
         });
 
     } catch (error) {
@@ -254,26 +252,26 @@ export const logout = async (req, res) => {
 
 export const refreshAccessToken = async (req, res) => {
   try {
-    // 1. Get refresh token from HTTP-only cookies
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken = req.cookies.StudentRefreshToken;
     if (!refreshToken) {
       return res.status(401).json({ message: "Refresh token not found. Please log in." });
     }
 
-    // 2. Verify the refresh token using your secret
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+    const newAccessToken = generateAccessToken(decoded.id, decoded.role);
 
-    // 3. Generate a new short-lived access token
-    const newAccessToken = jwt.sign(
-      { id: decoded.id, role: decoded.role },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '15m' }
-    );
+    res.cookie("StudentAccessToken", newAccessToken, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000,
+      path: "/",
+      sameSite: "lax",
+    });
 
-    // 4. Send back the new access token
-    res.status(200).json({ accessToken: newAccessToken });
+    return res.status(200).json({
+      message: "Token refreshed successfully",
+    });
   } catch (error) {
-    res.status(403).json({ message: "Invalid or expired refresh token." });
+    return res.status(401).json({ message: "Invalid or expired refresh token." });
   }
 };
 export const registerFirstAdmin = async (req, res) => {
