@@ -122,6 +122,7 @@ value={formData.phone}
  name="birthDate"
 value={formData.birthDate}
  onChange={handleChange}
+ max="2010-12-31"
  placeholder="Enter your birthDate"
  required
  />

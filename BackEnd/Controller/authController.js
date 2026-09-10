@@ -252,7 +252,8 @@ export const logout = async (req, res) => {
 
 export const refreshAccessToken = async (req, res) => {
   try {
-    const refreshToken = req.cookies.StudentRefreshToken;
+    
+    const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
       return res.status(401).json({ message: "Refresh token not found. Please log in." });
     }
@@ -267,9 +268,8 @@ export const refreshAccessToken = async (req, res) => {
       sameSite: "lax",
     });
 
-    return res.status(200).json({
-      message: "Token refreshed successfully",
-    });
+    
+    res.status(200).json({ accessToken: newAccessToken });
   } catch (error) {
     return res.status(401).json({ message: "Invalid or expired refresh token." });
   }

@@ -1,17 +1,13 @@
-import { Navigate } from "react-router-dom";
-import { useUserContext } from "../../contexts/UserContext.jsx";
-import { getStudentDashboardPath } from "../../pages/Student/studentPath.js";
 
-export default function ProtectedRoute({
-  children,
-  adminOnly = false,
-  allowedRoles,
-}) {
-  const { state } = useUserContext();
-  const user = state?.user;
+import { Navigate } from 'react-router-dom';
+import { useUserContext } from '../../contexts/UserContext.jsx'; 
 
+export default function ProtectedRoute({ children, adminOnly = false }) {
+  const { user } = useUserContext(); 
+
+  
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{from:location}} />;
   }
 
   const roles = allowedRoles ?? (adminOnly ? ["admin"] : null);
@@ -26,5 +22,5 @@ export default function ProtectedRoute({
     return <Navigate to="/" replace />;
   }
 
-  return children;
+  return children ? children :<Outlet/>;
 }
