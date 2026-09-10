@@ -194,6 +194,130 @@
   max-width: 46rem;
 }
 
+.student-paymentCard {
+  max-width: 64rem;
+}
+
+.student-sectionTitle {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--bt-maroon);
+}
+
+.student-success {
+  margin: 0 0 1rem;
+  color: #027a48;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.student-tableWrap {
+  overflow-x: auto;
+}
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.student-table th,
+.student-table td {
+  padding: 0.7rem 0.65rem;
+  text-align: left;
+  border-bottom: 1px solid var(--bt-border);
+  white-space: nowrap;
+}
+
+.student-table th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--bt-muted);
+}
+
+.student-statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.student-statusBadge--pending {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.student-statusBadge--approved {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.student-statusBadge--rejected {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.student-paymentForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.15rem;
+}
+
+.student-paymentField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.student-paymentField--full,
+.student-submitBtn {
+  grid-column: 1 / -1;
+}
+
+.student-paymentField label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bt-muted);
+}
+
+.student-paymentField input,
+.student-paymentField select {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--bt-border);
+  border-radius: 10px;
+  font: inherit;
+  color: var(--bt-ink);
+  background: #fff;
+}
+
+.student-submitBtn {
+  margin-top: 0.35rem;
+  border: 0;
+  border-radius: 12px;
+  padding: 0.85rem 1.1rem;
+  background: var(--bt-maroon);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.student-submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .student-profileGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -218,7 +342,8 @@
 }
 
 @media (max-width: 700px) {
-  .student-profileGrid {
+  .student-profileGrid,
+  .student-paymentForm {
     grid-template-columns: 1fr;
   }
 }

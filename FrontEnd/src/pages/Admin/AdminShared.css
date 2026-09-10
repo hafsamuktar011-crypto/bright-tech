@@ -181,7 +181,8 @@
   color: #027a48;
 }
 
-.admin-statusBadge--denied {
+.admin-statusBadge--denied,
+.admin-statusBadge--rejected {
   background: #fef3f2;
   color: #b42318;
 }

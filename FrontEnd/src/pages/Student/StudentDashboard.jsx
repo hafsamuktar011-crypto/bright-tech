@@ -3,6 +3,7 @@ import { NavLink, Navigate, Outlet, useLocation, useParams } from "react-router-
 import { useUserContext } from "../../contexts/UserContext.jsx";
 import { getStudent } from "../../service/userService.js";
 import { getStudentDashboardPath, toStudentSlug } from "./studentPath.js";
+import StudentPayments from "./StudentPayments.jsx";
 import "./StudentDashboard.css";
 
 const navItems = [
@@ -111,6 +112,8 @@ export function StudentOverview() {
           </dl>
         </div>
       )}
+
+      <StudentPayments />
     </section>
   );
 }
