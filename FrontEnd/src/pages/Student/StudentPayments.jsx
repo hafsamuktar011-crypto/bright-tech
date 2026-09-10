@@ -114,7 +114,7 @@ function StudentPayments() {
 
   return (
     <>
-      <div className="student-profileCard student-paymentCard">
+      <div className="student-paymentCard">
         <h2 className="student-sectionTitle">Payment History</h2>
         {loading && <p className="student-status">Loading your payments…</p>}
         {!loading && payments.length === 0 && (
@@ -156,7 +156,7 @@ function StudentPayments() {
         )}
       </div>
 
-      <div className="student-profileCard student-paymentCard">
+      <div className="student-paymentCard">
         <h2 className="student-sectionTitle">Submit Payment</h2>
         {message && <p className="student-success">{message}</p>}
         {error && <p className="student-error">{error}</p>}

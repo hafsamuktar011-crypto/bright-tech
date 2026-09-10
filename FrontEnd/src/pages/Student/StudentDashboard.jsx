@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import { NavLink, Navigate, Outlet, useLocation, useParams } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext.jsx";
-import { getStudent } from "../../service/userService.js";
 import { getStudentDashboardPath, toStudentSlug } from "./studentPath.js";
 import StudentPayments from "./StudentPayments.jsx";
 import "./StudentDashboard.css";
@@ -27,91 +25,14 @@ function StudentSection({ title, lead }) {
 }
 
 export function StudentOverview() {
-  const { state, setUser } = useUserContext();
-  const [student, setStudent] = useState(state?.user || null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    getStudent()
-      .then((response) => {
-        if (cancelled) return;
-        const liveStudent = response.data.user;
-        setStudent(liveStudent);
-        setUser(liveStudent);
-        setError("");
-      })
-      .catch((err) => {
-        if (cancelled) return;
-        setError(
-          err.response?.data?.message ||
-            err.message ||
-            "Unable to load student data."
-        );
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   return (
     <section className="student-panel">
       <header className="student-header">
         <div className="student-headerCopy">
           <h1>Dashboard</h1>
-          <p>Your profile from Bright tech records.</p>
+          <p>Your student dashboard information.</p>
         </div>
       </header>
-
-      {loading && <p className="student-status">Loading your profile…</p>}
-      {error && <p className="student-error">{error}</p>}
-
-      {!loading && !error && student && (
-        <div className="student-profileCard">
-          <dl className="student-profileGrid">
-            <div>
-              <dt>Full name</dt>
-              <dd>{student.fullName}</dd>
-            </div>
-            <div>
-              <dt>Email</dt>
-              <dd>{student.emailAddress}</dd>
-            </div>
-            <div>
-              <dt>Phone</dt>
-              <dd>{student.phone}</dd>
-            </div>
-            <div>
-              <dt>Birth date</dt>
-              <dd>{student.birthDate}</dd>
-            </div>
-            <div>
-              <dt>Gender</dt>
-              <dd>{student.gender}</dd>
-            </div>
-            <div>
-              <dt>Academic background</dt>
-              <dd>{student.academicBackground}</dd>
-            </div>
-            <div>
-              <dt>Role</dt>
-              <dd>{student.role}</dd>
-            </div>
-            {student.status && (
-              <div>
-                <dt>Status</dt>
-                <dd>{student.status}</dd>
-              </div>
-            )}
-          </dl>
-        </div>
-      )}
 
       <StudentPayments />
     </section>

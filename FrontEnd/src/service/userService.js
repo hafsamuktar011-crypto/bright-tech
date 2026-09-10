@@ -15,7 +15,3 @@ export const getStudents = () => {
 export const getInstructors = () => {
   return api.get("/user/instructors-list");
 };
-
-export const getStudent = () => {
-  return api.get("/user/student");
-};
