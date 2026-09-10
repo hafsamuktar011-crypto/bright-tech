@@ -55,6 +55,7 @@ function AppContent() {
             <Route path="instructors" element={<InstructorsList />} />
             <Route path="payments" element={<PaymentManagement />} />
             <Route path="courses" element={<ManageCourses />} />
+            
           </Route>
           <Route
             path="/student-dashboard/:studentName"
