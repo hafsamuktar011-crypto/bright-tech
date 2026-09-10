@@ -23,7 +23,7 @@ import StudentDashboard, {
   StudentSettings,
 } from "./pages/Student/StudentDashboard.jsx";
 
-import { UserContextProvider } from "./contexts/UserContext.jsx";
+import { UserContextProvider } from "./contexts/usercontext.jsx"
 
 import Footer from "./components/common/Footer.jsx";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
