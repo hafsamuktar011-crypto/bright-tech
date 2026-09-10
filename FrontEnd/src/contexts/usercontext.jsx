@@ -70,6 +70,6 @@ export const UserContextProvider = ({ children }) => {
 };
 
 export function useUserContext() {
-    const useContext(UserContext);
-    return useContext;
+    return useContext(UserContext);
+    
 };
