@@ -1,13 +1,17 @@
 
-import { Navigate } from 'react-router-dom';
+import { Navigate,useLocation,Outlet } from 'react-router-dom';
 import { useUserContext } from '../../contexts/UserContext.jsx'; 
 
 export default function ProtectedRoute({ children, adminOnly = false }) {
-  const { user } = useUserContext(); 
+  const { user ,loading } = useUserContext();
+  const location=useLocation 
 
+  if(loading){
+    return <div>Loading...</div>
+  }
   
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{from:location}} />;
   }
 
   
@@ -15,5 +19,5 @@ export default function ProtectedRoute({ children, adminOnly = false }) {
     return <Navigate to="/" replace />; 
   }
 
-  return children;
+  return children ? children :<Outlet/>;
 }
