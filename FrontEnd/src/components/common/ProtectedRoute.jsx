@@ -1,18 +1,29 @@
+import { Navigate } from "react-router-dom";
+import { useUserContext } from "../../contexts/UserContext.jsx";
+import { getStudentDashboardPath } from "../../pages/Student/studentPath.js";
 
-import { Navigate } from 'react-router-dom';
-import { useUserContext } from '../../contexts/UserContext.jsx'; 
+export default function ProtectedRoute({
+  children,
+  adminOnly = false,
+  allowedRoles,
+}) {
+  const { state } = useUserContext();
+  const user = state?.user;
 
-export default function ProtectedRoute({ children, adminOnly = false }) {
-  const { user } = useUserContext(); 
-
-  
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  
-  if (adminOnly && user.role !== 'admin') {
-    return <Navigate to="/" replace />; 
+  const roles = allowedRoles ?? (adminOnly ? ["admin"] : null);
+
+  if (roles && !roles.includes(user.role)) {
+    if (user.role === "student") {
+      return <Navigate to={getStudentDashboardPath(user)} replace />;
+    }
+    if (user.role === "admin") {
+      return <Navigate to="/admin" replace />;
+    }
+    return <Navigate to="/" replace />;
   }
 
   return children;

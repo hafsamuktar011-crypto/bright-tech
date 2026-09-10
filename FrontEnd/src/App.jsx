@@ -15,6 +15,12 @@ import StudentsList from "./pages/Admin/StudentsList.jsx";
 import RegisterStaff from "./pages/Admin/RegisterStaff.jsx";
 import PaymentManagement from "./pages/Admin/PaymentManagement.jsx";
 import ManageCourses from "./pages/Admin/ManageCourses.jsx";
+import StudentDashboard, {
+  StudentAssignments,
+  StudentCoursesPanel,
+  StudentOverview,
+  StudentSettings,
+} from "./pages/Student/StudentDashboard.jsx";
 
 import { UserContextProvider } from "./contexts/UserContext.jsx";
 
@@ -37,7 +43,7 @@ function AppContent() {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute adminOnly>
                 <AdminDashboard />
               </ProtectedRoute>
             }
@@ -47,6 +53,19 @@ function AppContent() {
             <Route path="students" element={<StudentsList />} />
             <Route path="payments" element={<PaymentManagement />} />
             <Route path="courses" element={<ManageCourses />} />
+          </Route>
+          <Route
+            path="/student-dashboard/:studentName"
+            element={
+              <ProtectedRoute allowedRoles={["student"]}>
+                <StudentDashboard />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<StudentOverview />} />
+            <Route path="assignments" element={<StudentAssignments />} />
+            <Route path="courses" element={<StudentCoursesPanel />} />
+            <Route path="settings" element={<StudentSettings />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

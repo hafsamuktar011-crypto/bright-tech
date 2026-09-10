@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Login.css";
 import { login } from "../../service/authService.js";
 import { useUserContext } from "../../contexts/UserContext.jsx";
+import { getStudentDashboardPath } from "../Student/studentPath.js";
 import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
@@ -18,9 +19,19 @@ function Login() {
     setLoading(true);
     try {
       const response = await login(email, password);
-      setUser(response.data.user);
-      setAccessToken(response.data.accessToken)
-      navigate("/welcome");
+      const loggedInUser = response.data.user;
+      setUser(loggedInUser);
+      setAccessToken(response.data.accessToken);
+
+      if (loggedInUser?.role === "admin") {
+        navigate("/welcome");
+      } else if (loggedInUser?.role === "student") {
+        navigate(getStudentDashboardPath(loggedInUser));
+      } else if (loggedInUser?.role === "instructor") {
+        navigate("/welcome");
+      } else {
+        navigate("/welcome");
+      }
     } catch (err) {
       setError(err.response?.data?.message || err.message);
     } finally {
