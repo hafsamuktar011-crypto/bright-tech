@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { BookOpen, Code2, Hammer, TrendingUp, ArrowRight } from "lucide-react";
-import SiteNav from "../components/SiteNav.jsx";
-import "../styles/homepage.css";
+import SiteNav from "../../components/common/SiteNav.jsx";
+import "./Homepage.css";
 
 const learningSteps = [
   {

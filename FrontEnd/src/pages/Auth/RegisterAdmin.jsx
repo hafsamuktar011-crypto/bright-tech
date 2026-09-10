@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import "../styles/register.css";
+import "./Register.css";
 
 export default function RegisterAdmin() {
  const [formData, setFormData] = useState({

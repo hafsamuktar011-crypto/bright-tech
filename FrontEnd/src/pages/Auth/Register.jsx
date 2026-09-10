@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "../styles/register.css";
-import { register } from "../service/userService.js";
+import "./Register.css";
+import { register } from "../../service/userService.js";
 import { useNavigate, Link } from "react-router-dom";
 
 const initialFormData = {
