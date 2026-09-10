@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { legacyCreateColumnHelper } from "@tanstack/react-table/legacy";
 import { api } from "../../service/axiosInstance";
 import DataTable from "../../components/admin/DataTable";
-import "../../styles/adminShared.css";
-import "../../styles/ManageCourses.css";
+import "./AdminShared.css";
+import "./ManageCourses.css";
 
 const columnHelper = legacyCreateColumnHelper();
 

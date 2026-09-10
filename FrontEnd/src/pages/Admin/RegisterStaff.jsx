@@ -1,5 +1,5 @@
 import { useState } from "react"
-import "../../styles/RegisterStaff.css"
+import "./RegisterStaff.css"
 import { registerStaff } from "../../service/userService.js"
 
 function RegisterStaff() {

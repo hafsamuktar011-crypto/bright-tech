@@ -1,7 +1,7 @@
-import SiteNav from "../components/SiteNav.jsx";
-import { courses } from "../assets/courseData.js";
-import HomeCard from "../components/ui/homecrad.jsx";
-import "../styles/courses.css";
+import SiteNav from "../../components/common/SiteNav.jsx";
+import { courses } from "../../assets/courseData.js";
+import HomeCard from "../../components/common/HomeCard.jsx";
+import "./Courses.css";
 
 function Courses() {
   return (

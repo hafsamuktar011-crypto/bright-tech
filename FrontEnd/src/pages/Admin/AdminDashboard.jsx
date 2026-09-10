@@ -1,4 +1,4 @@
-import "../../styles/AdminDashboard.css";
+import "./AdminDashboard.css";
 import { Outlet, NavLink, Link } from "react-router-dom";
 
 const navItems = [

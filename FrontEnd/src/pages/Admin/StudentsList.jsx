@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { legacyCreateColumnHelper } from "@tanstack/react-table/legacy";
 import { getStudents } from "../../service/userService.js";
 import DataTable from "../../components/admin/DataTable";
-import "../../styles/adminShared.css";
+import "./AdminShared.css";
 
 const columnHelper = legacyCreateColumnHelper();
 

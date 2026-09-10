@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkAdmin, logout } from "../../service/authService.js";
-import { useUserContext } from "../../contexts/usercontext.jsx";
-import "./welcomePage.css";
+import { useUserContext } from "../../contexts/UserContext.jsx";
+import "./WelcomePage.css";
 
 const WelcomePage = () => {
   const navigate = useNavigate();

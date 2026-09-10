@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import SiteNav from "../components/SiteNav.jsx";
-import "../styles/about.css";
+import SiteNav from "../../components/common/SiteNav.jsx";
+import "./About.css";
 
 function About() {
   return (
