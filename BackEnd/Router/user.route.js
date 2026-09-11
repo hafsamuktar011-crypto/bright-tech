@@ -3,9 +3,10 @@ import express from "express";
 import {register,viewUser,updateUser,getAllStudents,getAllInstructors,registerUserByAdmin,getStudent
 } from "../Controller/userController.js";
 
-import authMiddleware, { isAdmin} from "../Middlewares/authMiddleware.js";
+import authMiddleware, {verifyAccessToken, isAdmin} from "../Middlewares/authMiddleware.js";
 
 import RegistrationSchema from "../Schema/RegistrationSchema.js";
+
 
 import { validate }from "../Middlewares/validate.js";
 
@@ -51,7 +52,7 @@ userRoute.get(
 );
 userRoute.post(
     "/register-staff",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     registerUserByAdmin
 );

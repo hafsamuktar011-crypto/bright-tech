@@ -15,17 +15,25 @@ import {
 import authMiddleware from "../Middlewares/authMiddleware.js";
 import { validate } from "../Middlewares/validate.js";
 import LoginSchema from "../Schema/LoginSchema.js";
+import {
+    loginRateLimit,
+    forgotPasswordRateLimit,
+    resetPasswordRateLimit,
+    updatePasswordRateLimit,
+} from "../Middlewares/rateLimit.js";
 
 export const authRoute = express.Router();
 
 authRoute.post(
     "/login",
+    loginRateLimit,
     validate(LoginSchema),
     login
 );
 
 authRoute.post(
     "/forgot-password",
+    forgotPasswordRateLimit,
     forgotPassword
 );
 
@@ -33,12 +41,14 @@ authRoute.post(
 
 authRoute.post(
     "/me",
+    resetPasswordRateLimit,
     resetPassword
 );
 
 authRoute.put(
     "/newPassword",
     authMiddleware,
+    updatePasswordRateLimit,
     updatePassword
 );
 

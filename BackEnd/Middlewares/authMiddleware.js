@@ -1,8 +1,18 @@
 import jwt from "jsonwebtoken";
 import User from "../Model/usersModel.js";
 
+// const header = req.headers.authorization; // "Bearer <token>"
+
+//   if (!header || !header.startsWith('Bearer ')) {
+//     return res.status(401).json({ message: 'No access token provided' });
+//   }
+
+//   const token = header.slice(7); // strip "Bearer "
+
+
+//verifyRefreshtoken
 function authMiddleware(req, res, next) {
-    const token = req.cookies.StudentAccessToken;
+    const token = req.cookies["StudentRefreshToken"]
     console.log(token)
 
     if (!token) {
@@ -56,7 +66,7 @@ export const isAdmin = async (req, res, next) => {
     }
 };
 
-const verifyAccessToken = async (req, res, next) => {
+export const verifyAccessToken = async (req, res, next) => {
     const AuthHeader = req.headers.authorization;
     if(!AuthHeader || !AuthHeader.startsWith("Bearer ")) {
         return res.status(401).json({message: "Unauthorized"})

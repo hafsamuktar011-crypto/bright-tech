@@ -52,8 +52,8 @@ const userSchema = new mongoose.Schema(
 
         status: {
             type: String,
-            enum: ["open", "close"],
-            default: "open"
+            enum: ["active", "block"],
+            default: "active"
         },
 
         role: {
@@ -61,9 +61,7 @@ const userSchema = new mongoose.Schema(
             enum: [
                 "student",
                 "admin",
-                "registrar",
                 "instructor",
-                "finance"
             ],
             default: "student"
         },

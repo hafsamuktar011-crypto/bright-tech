@@ -41,7 +41,6 @@ export const register = async (req, res) => {
             emailAddress,
             phone,
             password: hashedPassword,
-            role: "student"
         });
 
         return res.status(201).json({
@@ -155,10 +154,10 @@ export const registerUserByAdmin =async (req,res) => {
             ...otherData
         } = req.body;
 
-      const allowedRoles = ["instructor", "admin"];
+      const allowedRoles = ["instructor", "student"];
       if (!allowedRoles.includes(role)) {
         return res.status(400).json({
-          message: "Role must be instructor or admin"
+          message: "Role must be instructor or student"
         });
       }
 
