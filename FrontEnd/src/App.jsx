@@ -5,7 +5,6 @@ import About from "./pages/Home/About.jsx";
 import Courses from "./pages/Home/Courses.jsx";
 import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
-// import RegisterAdmin from "./pages/Auth/RegisterAdmin.jsx";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import WelcomePage from "./pages/Welcome/WelcomePage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
@@ -39,7 +38,7 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/register" element={<Register />} />
-          {/* <Route path="/register-admin" element={<RegisterAdmin />} /> */}
+          
           <Route
             path="/admin"
             element={
