@@ -3,7 +3,7 @@ import "./RegisterStaff.css"
 import { registerStaff } from "../../service/userService.js"
 
 function RegisterStaff() {
-        const [message,setMessage] =useState("")
+    const [message,setMessage] =useState("")
     const [error,setError] =useState("")
     const [formData,setFormData]=useState({
         fullName:"",
@@ -12,8 +12,7 @@ function RegisterStaff() {
         birthDate:"",
         gender:"male",
         academicBackground:"",
-        selectSupportType:["Online"],
-        password:"",
+        selectSupportType:"Online",
         role:"instructor",
     })
 
@@ -31,13 +30,13 @@ function RegisterStaff() {
             const res = await registerStaff(formData)
             setMessage(res.data?.message || "Staff registered successfully!")
             setFormData({
-                fullName:"",
+        fullName:"",
         emailAddress:"",
         phone:"",
         birthDate:"",
         gender:"male",
         academicBackground:"",
-        selectSupportType:["Online"],
+        selectSupportType:"Online",
         role:"instructor",
             })
             console.log(res.data)
@@ -48,8 +47,8 @@ function RegisterStaff() {
   return (
     <div className="register-staff-container">
         <h2>Register User</h2>
-        {message && <p className="register-staff-success" style={{color:"green"}}>{message}</p>}
-        {error && <p className="register-staff-error" style={{color:"red"}}>{error}</p>}
+        {message && <p className="register-staff-success" style={{ color:"green" }}>{message}</p>}
+        {error && <p className="register-staff-error" style={{ color:"red" }}>{error}</p>}
         <form className="register-staff-form" onSubmit={handleSubmit}>
          <div className="register-staff-field">
             <label>Full Name:</label>
@@ -108,7 +107,7 @@ function RegisterStaff() {
             </select>
          </div>
           
-         <button className="register-staff-submit" type="submit">Add New const [state, dispatch] = useReducer(first, second, third)ser</button>
+         <button className="register-staff-submit" type="submit">Add New User</button>
         </form>
 
     </div>

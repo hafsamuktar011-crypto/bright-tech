@@ -1,6 +1,6 @@
 import express from "express";
 
-import authMiddleware, {
+import { verifyAccessToken,
     isAdmin
 } from "../Middlewares/authMiddleware.js";
 
@@ -25,7 +25,7 @@ export const paymentRoute =
 
 paymentRoute.post(
     "/submit",
-    authMiddleware,
+    verifyAccessToken,
     validate(PaymentSchema),
     studentSubmitPayment
 );
@@ -33,20 +33,20 @@ paymentRoute.post(
 
 paymentRoute.put(
     "/review/:id",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     reviewPayment
 );
 
 paymentRoute.get(
     "/my-payments",
-    authMiddleware,
+    verifyAccessToken,
     getMyPayments
 );
 
 paymentRoute.get(
     "/",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     getAllPayments
 );

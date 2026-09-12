@@ -1,18 +1,21 @@
+// src/context/UserContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
-import { api } from "../service/axiosInstance.js";
+import { setGlobalAccessToken } from "../service/axiosInstance.js";
 
 const UserContext = createContext(null);
 
 export const UserContextProvider = ({ children }) => {
+  // --- 1. INSERT STATE WITH LOADING FIELD HERE ---
   const [state, setState] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return {
       user: savedUser ? JSON.parse(savedUser) : null,
       accessToken: null,
-      loading: false,
+      loading: true, // Starts as true to let the app attempt a boot refresh
     };
   });
 
+  // Helper setter for User profiles
   const setUser = (data) => {
     if (data) {
       localStorage.setItem("user", JSON.stringify(data));
@@ -22,42 +25,33 @@ export const UserContextProvider = ({ children }) => {
     setState((prev) => ({ ...prev, user: data }));
   };
 
+  // Helper setter for Access Tokens
   const setAccessToken = (token) => {
+    setGlobalAccessToken(token); // Syncs to your decoupled Axios instance variable
     setState((prev) => ({ ...prev, accessToken: token }));
   };
 
+  // --- 2. INSERT EFFECT TO TURN LOADING OFF AFTER INITIAL BOOTUP PHASE ---
   useEffect(() => {
-    const interceptor = api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const originalRequest = error.config;
+    // If a user exists in localStorage, give the Axios interceptor a small window 
+    // to attempt an immediate silent boot refresh if necessary.
+    setState((prev) => ({ ...prev, loading: false }));
+  }, []);
 
-        if (
-          (error.response?.status === 401 || error.response?.status === 403) &&
-          !originalRequest._retry
-        ) {
-          originalRequest._retry = true;
-          try {
-            await api.post("/auth/refresh-access-token");
-            return api(originalRequest);
-          } catch (refreshError) {
-            setUser(null);
-            return Promise.reject(refreshError);
-          }
-        }
-        return Promise.reject(error);
-      }
-    );
-
+  // Sync token state if your standalone Axios interceptor triggers a refresh in the background
+  useEffect(() => {
+    window.__onTokenRefreshed = (newToken) => {
+      setState((prev) => ({ ...prev, accessToken: newToken }));
+    };
     return () => {
-      api.interceptors.response.eject(interceptor);
+      window.__onTokenRefreshed = null;
     };
   }, []);
 
   const value = {
     user: state.user,
     accessToken: state.accessToken,
-    loading: state.loading,
+    loading: state.loading, // Handed down so ProtectedRoute can inspect it
     setUser,
     setAccessToken,
   };
@@ -69,7 +63,13 @@ export const UserContextProvider = ({ children }) => {
   );
 };
 
-export function useUserContext() {
-    return useContext(UserContext);
-    
+export const useUserContext = () => {
+  const ctx = useContext(UserContext);
+  if (!ctx) {
+    throw new Error("useUserContext must be used within a UserContextProvider");
+  }
+  return ctx;
 };
+  
+
+

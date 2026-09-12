@@ -11,7 +11,7 @@ const emptyForm = {
   courseName: "",
   courseCode: "",
   description: "",
-  credits: "",
+  courseDuration: "",
   instructorId: "",
   batchNumber: "",
   programType: "Online",
@@ -19,6 +19,7 @@ const emptyForm = {
 
 function ManageCourses() {
   const [courses, setCourses] = useState([]);
+  const [instructors,setInstructors] = useState([])
   const [formData, setFormData] = useState(emptyForm);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -36,7 +37,18 @@ function ManageCourses() {
     };
     fetchCourses();
   }, []);
-
+useEffect(() => {
+  const fetchInstructors =async () => {
+    try {
+      const res = await api.get("/users");
+      const rows = res.data?.data ?? res.data ?? [];
+      setInstructors(Array.isArray(rows) ? rows : []);
+    } catch (err) {
+      console.log("Failed to load instructors",err);
+    }
+  }
+  fetchInstructors();
+},[])
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -78,8 +90,8 @@ function ManageCourses() {
       columnHelper.accessor("courseCode", {
         header: "Code",
       }),
-      columnHelper.accessor("credits", {
-        header: "Credits",
+      columnHelper.accessor("courseDuration", {
+        header: "courseDuration",
       }),
       columnHelper.accessor("programType", {
         header: "Type",
@@ -146,20 +158,28 @@ function ManageCourses() {
             required
           />
           <input
-            type="number"
-            name="credits"
-            placeholder="Credits"
-            value={formData.credits}
+            type="text"
+            name="courseDuration"
+            placeholder="Course Duration"
+            value={formData.courseDuration}
             onChange={handleChange}
             required
           />
-          <input
-            type="text"
+          <select
             name="instructorId"
             placeholder="Instructor Id"
             value={formData.instructorId}
             onChange={handleChange}
-          />
+            required
+            >
+              <option value="">Select Instructor</option>
+              {instructors.map((instructor)=>(
+                <option key={instructor._id} value={instructor._id}>
+                   {instructor.name}
+                </option>
+              ))}
+            </select>
+          
           <input
             type="text"
             name="batchNumber"

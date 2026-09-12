@@ -20,10 +20,9 @@ const courseSchema = new mongoose.Schema(
             type: String
         },
 
-        credits: {
-            type: Number,
-            required: true,
-            default: 3
+        courseDuration: {
+            type: String,
+            required: true
         },
 
         instructorId: {

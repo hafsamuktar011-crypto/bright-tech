@@ -1,17 +1,15 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
-
-
 import Homepage from "./pages/Home/Homepage.jsx";
 import About from "./pages/Home/About.jsx";
 import Courses from "./pages/Home/Courses.jsx";
 import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
-import RegisterAdmin from "./pages/Auth/RegisterAdmin.jsx";
-import ForgotPassword from "./pages/Auth/ForgotPassword.jsx";
-import WelcomePage from "./pages/Welcome/WelcomePage.jsx";
-import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
-import StudentsList from "./pages/Admin/StudentsList.jsx";
+// import RegisterAdmin from "./pages/Auth/RegisterAdmin.jsx";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
+import WelcomePage from "./pages/Welcome/WelcomePage";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import StudentsList from "./pages/Admin/StudentsList";
 import InstructorsList from "./pages/Admin/InstructorsList.jsx";
 import RegisterStaff from "./pages/Admin/RegisterStaff.jsx";
 import PaymentManagement from "./pages/Admin/PaymentManagement.jsx";
@@ -40,7 +38,7 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/register-admin" element={<RegisterAdmin />} />
+          {/* <Route path="/register-admin" element={<RegisterAdmin />} /> */}
           <Route
             path="/admin"
             element={

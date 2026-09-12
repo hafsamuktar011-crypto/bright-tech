@@ -27,19 +27,15 @@ export const login = async (req, res) => {
                 message: "Invalid email or password"
             });
         }
-
+      if(user.status === "blocked"){
+        return res.status(403).json({message:"Your account has been blocked.Please contact support"})
+      }
         const accessToken = generateAccessToken(String(user._id), user.role);
         const refreshToken = generateRefreshToken(String(user._id), user.role);
-
-        res.cookie("StudentAccessToken", accessToken, {
+        
+        res.cookie("refresh_token", refreshToken, {
             httpOnly: true,
-            maxAge: 15 * 60 * 1000,
-            path:"/",
-            sameSite:"lax"
-        });
-
-        res.cookie("StudentRefreshToken", refreshToken, {
-            httpOnly: true,
+            secure:process.env.NODE_ENV==="production",
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path:"/",
             sameSite:"lax"
@@ -47,6 +43,7 @@ export const login = async (req, res) => {
 
         return res.status(200).json({
             message: "Login successful",
+            accessToken:accessToken,
             user: toSafeUser(user)
         });
 
@@ -72,7 +69,7 @@ export const forgotPassword = async (req, res) => {
 
         const resetToken = jwt.sign(
             { id: user._id },
-            process.env.JWT_SECRET,
+            process.env.JWT_PASSWORD_SECRET,
             { expiresIn: "15m" }
         );
 
@@ -116,7 +113,7 @@ export const resetPassword = async (req, res) => {
     try {
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET
+            process.env.JWT_PASSWORD_SECRET
         );
 
         const user = await User.findOne({
@@ -202,118 +199,90 @@ export const updatePassword = async (req, res) => {
     }
 };
 
-
-export const refresh = async (req, res) => {
-    const token = req.cookies.StudentRefreshToken;
-
-    if (!token) {
-        return res.status(401).json({
-            message: "Please login first"
-        });
-    }
-
+export const logout = async (req, res) => {
     try {
-        const decoded = jwt.verify(
-            token,
-            process.env.JWT_SECRET
-        );
 
-        const newAccessToken = generateAccessToken(
-            decoded.id,
-            decoded.role
-        );
-
-        res.cookie("StudentAccessToken", newAccessToken, {
+        res.clearCookie("refresh_token", {
             httpOnly: true,
-            maxAge: 15 * 60 * 1000
+            secure: process.env.NODE_ENV === "production",
+            path: "/",
+            sameSite: "lax"
         });
 
         return res.status(200).json({
-            message: "Token refreshed successfully"
+            message: "Logged out successfully"
         });
-
+        
     } catch (error) {
-        return res.status(401).json({
-            message: "Invalid or expired refresh token"
+        return res.status(500).json({
+            message: error.message
         });
     }
 };
 
 
-export const logout = async (req, res) => {
-    res.clearCookie("StudentAccessToken");
-    res.clearCookie("StudentRefreshToken");
 
-    return res.status(200).json({
-        message: "Logged out successfully"
-    });
+
+
+
+
+export const refresh = async (req, res) => {
+    
+    const refreshToken = req.cookies.refresh_token;
+    
+    if (!refreshToken) {
+        return res.status(401).json({ message: "No refresh token provided" });
+    }
+
+    try {
+        
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, decoded) => {
+            if (err) {
+                return res.status(403).json({ message: "Invalid or expired refresh token" });
+            }
+
+            
+            const user = await User.findById(decoded.id);
+            if (!user) {
+                return res.status(403).json({ message: "User not found" });
+            }
+
+            
+            const accessToken = generateAccessToken(String(user._id), user.role);
+
+            
+            return res.status(200).json({ accessToken });
+        });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 };
 
 
 export const refreshAccessToken = async (req, res) => {
   try {
-    
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken = req.cookies.refresh_token;
+
     if (!refreshToken) {
       return res.status(401).json({ message: "Refresh token not found. Please log in." });
     }
 
-    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+    
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    
+    
     const newAccessToken = generateAccessToken(decoded.id, decoded.role);
 
-    res.cookie("StudentAccessToken", newAccessToken, {
-      httpOnly: true,
-      maxAge: 15 * 60 * 1000,
-      path: "/",
-      sameSite: "lax",
-    });
-
     
-    res.status(200).json({ accessToken: newAccessToken });
+    return res.status(200).json({ 
+      message: "Token refreshed successfully",
+      accessToken: newAccessToken 
+    });
+    
   } catch (error) {
-    return res.status(401).json({ message: "Invalid or expired refresh token." });
+    return res.status(401).json({ message: "Invalid or expired refresh token" });
   }
 };
-export const registerFirstAdmin = async (req, res) => {
-  try {
-    const {fullName,emailAddress, password,phone,birthDate,academicBackground,gender } = req.body;
 
-    
-    const existingAdmin = await User.findOne({ role: 'admin' });
 
-    
-    let assignedRole = 'student';
-    if (!existingAdmin) {
-      assignedRole = 'admin'; 
-    } else {
-      return res.status(403).json({ 
-        message: "Admin registration is closed. An administrator already exists." 
-      });
-    }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = new User({
-        fullName,
-        emailAddress,
-         password,
-         phone,
-         birthDate,
-         academicBackground,
-         gender,
-      password: hashedPassword,
-      role: assignedRole,
-    });
-
-    await newUser.save();
-
-    res.status(201).json({ 
-      success: true, 
-      message:` First admin account successfully created for ${emailAddress}.` 
-    });
-
-  } catch (error) {
-    console.error("Register admin error:",error)
-    res.status(500).json({ success: false, error: error.message });
-  }
-};

@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../Model/usersModel.js";
 import toSafeUser from "../utils/toSafeUser.js";
-import sendEmail from "../utils/sendEmail.js";
+import sendEmail, {transport} from "../utils/sendEmail.js";
 
 
 export const register = async (req, res) => {
@@ -184,7 +184,7 @@ export const registerUserByAdmin =async (req,res) => {
     subject:"Your Account Credentials",
     text:`Hello,\n\nYour account has been successfully created.Your temporary password is:${tempPassword}\n\nPlease log in and update your password immediately. `
  };
- await WebTransportError.sendMail(mailOptions);
+ await transporter.sendMail(mailOptions);
 return res.status(201).json({message:"User registered successfully and temporary password sent via email",user:toSafeUser(newUser)})
     } catch (error) {
         res.status(500).json({message:error.message})
