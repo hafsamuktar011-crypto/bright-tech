@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Login.css";
 import { login } from "../../service/authService.js";
 import { useUserContext } from "../../contexts/UseUserContext.jsx";
-import { getStudentDashboardPath } from "../Student/studentPath.js";
+ import { getStudentDashboardPath } from "../Student/studentPath.js";
 import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
@@ -26,7 +26,7 @@ function Login() {
       if (loggedInUser?.role === "admin") {
         navigate("/admin");
       } else if (loggedInUser?.role === "student") {
-        navigate(getStudentDashboardPath);
+        navigate(getStudentDashboardPath(loggedInUser));
       } else if (loggedInUser?.role === "instructor") {
         navigate("/instructor-dashboard");
       } else {

@@ -6,13 +6,9 @@ import {
     resetPassword,
     updatePassword,
     logout,
-    refreshAccessToken,
-    registerFirstAdmin,
-    
-    
-} from "../Controller/authController.js";
+    refreshAccessToken} from "../Controller/authController.js";
 
-import authMiddleware from "../Middlewares/authMiddleware.js";
+import { verifyAccessToken } from "../Middlewares/authMiddleware.js";
 import { validate } from "../Middlewares/validate.js";
 import LoginSchema from "../Schema/LoginSchema.js";
 import {
@@ -47,15 +43,11 @@ authRoute.post(
 
 authRoute.put(
     "/newPassword",
-    authMiddleware,
+    verifyAccessToken,
     updatePasswordRateLimit,
     updatePassword
 );
 
-// authRoute.post(
-//     "/refresh",
-//     refresh
-// );
 
 authRoute.post(
     "/logout",
@@ -67,7 +59,3 @@ authRoute.post(
     "/refresh-access-token",
     refreshAccessToken
 );
-authRoute.post(
-         "/register-admin",
-         registerFirstAdmin
-     );

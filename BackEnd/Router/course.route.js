@@ -1,6 +1,6 @@
 import express from "express";
 
-import authMiddleware, {
+import {verifyAccessToken,
     isAdmin
 } from "../Middlewares/authMiddleware.js";
 
@@ -24,14 +24,14 @@ export const courseRoute =
 
 courseRoute.get(
     "/view",
-    authMiddleware,
+    verifyAccessToken,
     getAllCourses
 );
 
 
 courseRoute.post(
     "/create",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     createCourse
 );
@@ -39,7 +39,7 @@ courseRoute.post(
 
 courseRoute.put(
     "/update/:id",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     updateCourse
 );
@@ -47,7 +47,7 @@ courseRoute.put(
 
 courseRoute.delete(
     "/delete/:id",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     deleteCourse
 );

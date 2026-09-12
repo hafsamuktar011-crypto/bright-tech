@@ -6,7 +6,7 @@ function generateAccessToken(id, role) {
             id,
             role
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        process.env.JWT_ACCESS_SECRET,
         {
             expiresIn: "15m"
         }

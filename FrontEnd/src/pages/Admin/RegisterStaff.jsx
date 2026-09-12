@@ -3,7 +3,7 @@ import "./RegisterStaff.css"
 import { registerStaff } from "../../service/userService.js"
 
 function RegisterStaff() {
-        const [message,setMessage] =useState("")
+    const [message,setMessage] =useState("")
     const [error,setError] =useState("")
     const [formData,setFormData]=useState({
         fullName:"",
@@ -12,8 +12,7 @@ function RegisterStaff() {
         birthDate:"",
         gender:"male",
         academicBackground:"",
-        selectSupportType:["Online"],
-        password:"",
+        selectSupportType:"Online",
         role:"instructor",
     })
 
@@ -31,14 +30,13 @@ function RegisterStaff() {
             const res = await registerStaff(formData)
             setMessage(res.data?.message || "Staff registered successfully!")
             setFormData({
-                fullName:"",
+        fullName:"",
         emailAddress:"",
         phone:"",
         birthDate:"",
         gender:"male",
         academicBackground:"",
-        selectSupportType:["Online"],
-        password:"",
+        selectSupportType:"Online",
         role:"instructor",
             })
             console.log(res.data)
@@ -48,9 +46,9 @@ function RegisterStaff() {
     }
   return (
     <div className="register-staff-container">
-        <h2>Register Staff</h2>
-        {message && <p className="register-staff-success" style={{color:"green"}}>{message}</p>}
-        {error && <p className="register-staff-error" style={{color:"red"}}>{error}</p>}
+        <h2>Register User</h2>
+        {message && <p className="register-staff-success" style={{ color:"green" }}>{message}</p>}
+        {error && <p className="register-staff-error" style={{ color:"red" }}>{error}</p>}
         <form className="register-staff-form" onSubmit={handleSubmit}>
          <div className="register-staff-field">
             <label>Full Name:</label>
@@ -66,7 +64,7 @@ function RegisterStaff() {
          </div>
           <div className="register-staff-field">
             <label>Birth Date:</label>
-            <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} required />
+            <input type="date" name="birthDate" max="2010-12-31" value={formData.birthDate} onChange={handleChange} required />
          </div>
          <div className="register-staff-field">
             <label>Gender:</label>
@@ -78,7 +76,19 @@ function RegisterStaff() {
          </div>
           <div className="register-staff-field">
             <label>Academic Background:</label>
-            <input type="text" name="academicBackground" value={formData.academicBackground} onChange={handleChange} required />
+            <select 
+    name="academicBackground" 
+    value={formData.academicBackground} 
+    onChange={handleChange}
+    required
+  >
+    <option value="">Select Academic Background</option>
+    <option value="High School">High School</option>
+    <option value="Diploma">Diploma</option>
+    <option value="Bachelor">Bachelor's Degree</option>
+    <option value="Master">Master's Degree</option>
+    <option value="Other">Other</option>
+  </select>
          </div>
           <div className="register-staff-field">
             <label>Support Type:</label>
@@ -93,14 +103,11 @@ function RegisterStaff() {
             <label>Role:</label>
             <select name="role" value={formData.role} onChange={handleChange}>
                 <option value="instructor">Instructor</option>
-                <option value="admin">Admin</option>
+                <option value="student">Student</option>
             </select>
          </div>
-          <div className="register-staff-field register-staff-field--full">
-            <label>Password:</label>
-            <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-         </div>
-         <button className="register-staff-submit" type="submit">Register Staff Member</button>
+          
+         <button className="register-staff-submit" type="submit">Add New User</button>
         </form>
 
     </div>

@@ -3,7 +3,7 @@ import express from "express";
 import {register,viewUser,updateUser,getAllStudents,getAllInstructors,registerUserByAdmin,getStudent
 } from "../Controller/userController.js";
 
-import  {verifyAccessToken, isAdmin} from "../Middlewares/authMiddleware.js";
+import {verifyAccessToken, isAdmin} from "../Middlewares/authMiddleware.js";
 
 import RegistrationSchema from "../Schema/RegistrationSchema.js";
 

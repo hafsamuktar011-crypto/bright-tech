@@ -1,13 +1,17 @@
+import { Navigate, Outlet } from 'react-router-dom';
+import { useUserContext } from '../../contexts/UseUserContext.jsx'; 
+import { getStudentDashboardPath } from "../../pages/Student/studentPath.js";
 
-import { Navigate } from 'react-router-dom';
-import { useUserContext } from '../../contexts/UseUserContext'; 
-
-export default function ProtectedRoute({ children, adminOnly = false }) {
-  const { user } = useUserContext(); 
+export default function ProtectedRoute({ children, adminOnly = false, allowedRoles }) {
+  const { user, accessToken, loading } = useUserContext(); 
 
   
-  if (!user) {
-    return <Navigate to="/login" replace state={{from:location}} />;
+  if (loading) {
+    return <div className="loading-spinner">Loading authentication...</div>; 
+  }
+
+  if (!user || !accessToken) {
+    return <Navigate to="/login" replace />;
   }
 
   const roles = allowedRoles ?? (adminOnly ? ["admin"] : null);
@@ -22,5 +26,7 @@ export default function ProtectedRoute({ children, adminOnly = false }) {
     return <Navigate to="/" replace />;
   }
 
-  return children ? children :<Outlet/>;
+  return children ? children : <Outlet />;
 }
+
+
