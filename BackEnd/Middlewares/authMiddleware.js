@@ -11,8 +11,8 @@ import User from "../Model/usersModel.js";
 
 
 //verifyRefreshtoken
-function authMiddleware(req, res, next) {
-    const token = req.cookies["StudentRefreshToken"]
+function verifyRefreshtoken(req, res, next) {
+    const token = req.cookies["RefreshToken"]
     console.log(token)
 
     if (!token) {
@@ -24,7 +24,7 @@ function authMiddleware(req, res, next) {
     try {
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET
+            process.env.REFRESH_TOKEN_SECRET
         );
 
         req.user = decoded;
@@ -35,7 +35,7 @@ function authMiddleware(req, res, next) {
             message: "Invalid or expired token"
         });
     }
-}
+} 
 
 export const isAdmin = async (req, res, next) => {
     try {
@@ -67,6 +67,7 @@ export const isAdmin = async (req, res, next) => {
 };
 
 export const verifyAccessToken = async (req, res, next) => {
+
     const AuthHeader = req.headers.authorization;
     if(!AuthHeader || !AuthHeader.startsWith("Bearer ")) {
         return res.status(401).json({message: "Unauthorized"})
@@ -85,4 +86,4 @@ export const verifyAccessToken = async (req, res, next) => {
     }
 }
 
-export default authMiddleware;
+export default verifyAccessToken;

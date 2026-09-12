@@ -1,50 +1,45 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { api } from "../service/axiosInstance.js";
 
 const UserContext = createContext(null);
 
 export const UserContextProvider = ({ children }) => {
-  const [state, setState] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return {
-      user: savedUser ? JSON.parse(savedUser) : null,
-      accessToken: null,
-      loading: false,
-    };
+  const [state, setState] = useState({
+    user: null,
+    loading: true,
   });
 
   const setUser = (data) => {
-    if (data) {
-      localStorage.setItem("user", JSON.stringify(data));
-    } else {
-      localStorage.removeItem("user");
-    }
-    setState((prev) => ({ ...prev, user: data }));
-  };
-
-  const setAccessToken = (token) => {
-    setState((prev) => ({ ...prev, accessToken: token }));
+    setState((prev) => ({
+      ...prev,
+      user: data,
+    }));
   };
 
   useEffect(() => {
     const interceptor = api.interceptors.response.use(
       (response) => response,
+
       async (error) => {
         const originalRequest = error.config;
 
         if (
-          (error.response?.status === 401 || error.response?.status === 403) &&
-          !originalRequest._retry
+          (error.response?.status === 401 ||
+            error.response?.status === 403) &&
+          !originalRequest?._retry
         ) {
           originalRequest._retry = true;
+
           try {
             await api.post("/auth/refresh-access-token");
+
             return api(originalRequest);
           } catch (refreshError) {
             setUser(null);
             return Promise.reject(refreshError);
           }
         }
+
         return Promise.reject(error);
       }
     );
@@ -55,12 +50,9 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
   const value = {
-    state,
     user: state.user,
-    accessToken: state.accessToken,
     loading: state.loading,
     setUser,
-    setAccessToken,
   };
 
   return (

@@ -6,7 +6,7 @@ function generateRefreshToken(id, role) {
             id,
             role
         },
-        process.env.JWT_SECRET,
+        process.env.REFRESH_TOKEN_SECRET,
         {
             expiresIn: "7d"
         }

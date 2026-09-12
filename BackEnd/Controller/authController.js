@@ -220,32 +220,37 @@ export const updatePassword = async (req, res) => {
 
 
 export const refresh = async (req, res) => {
-    const token = req.cookies.StudentRefreshToken;
+    
+    //get the token from the cookies by the name RefreshToken
+    const token = req.cookies.RefreshToken;
 
     if (!token) {
         return res.status(401).json({
-            message: "Please login first"
+            message: "no refreshtoken found provided"
         });
     }
 
     try {
+        //verify the teoken
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET
+            process.env.REFRESH_TOKEN_SECRET
         );
-
+ //generate access token
         const newAccessToken = generateAccessToken(
             decoded.id,
             decoded.role
         );
-
-        res.cookie("StudentAccessToken", newAccessToken, {
+//set the new access in the cookie
+        res.cookie("AccessToken", newAccessToken, {
             httpOnly: true,
-            maxAge: 15 * 60 * 1000
+            maxAge: 15 * 60 * 1000,
+            path:"/",
+            sameSite:"lax"
         });
-
+//return new access token
         return res.status(200).json({
-            message: "Token refreshed successfully"
+             accessToken: newAccessToken 
         });
 
     } catch (error) {
@@ -255,6 +260,50 @@ export const refresh = async (req, res) => {
     }
 };
 
+
+
+
+export const refreshAccessToken = async (req, res) => {
+  try {
+    // Get the refresh token from the HttpOnly cookie
+    const refreshToken = req.cookies.StudentRefreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({
+        message: "No refresh token found",
+      });
+    }
+
+    // Verify the refresh token
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    // Generate a new access token
+    const newAccessToken = generateAccessToken(
+      decoded.id,
+      decoded.role
+    );
+
+    // Send the new access token as an HttpOnly cookie
+    res.cookie("StudentAccessToken", newAccessToken, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000,
+      path: "/",
+      sameSite: "lax",
+    });
+
+    return res.status(200).json({
+      message: "Access token refreshed successfully",
+    });
+
+  } catch (error) {
+    return res.status(401).json({
+      message: "Invalid or expired refresh token",
+    });
+  }
+};
 
 export const logout = async (req, res) => {
     res.clearCookie("StudentAccessToken");
@@ -266,30 +315,7 @@ export const logout = async (req, res) => {
 };
 
 
-export const refreshAccessToken = async (req, res) => {
-  try {
-    
-    const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) {
-      return res.status(401).json({ message: "Refresh token not found. Please log in." });
-    }
 
-    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
-    const newAccessToken = generateAccessToken(decoded.id, decoded.role);
-
-    res.cookie("StudentAccessToken", newAccessToken, {
-      httpOnly: true,
-      maxAge: 15 * 60 * 1000,
-      path: "/",
-      sameSite: "lax",
-    });
-
-    
-    res.status(200).json({ accessToken: newAccessToken });
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid or expired refresh token." });
-  }
-};
 export const registerFirstAdmin = async (req, res) => {
   try {
     const {fullName,emailAddress, password,phone,birthDate,academicBackground,gender } = req.body;

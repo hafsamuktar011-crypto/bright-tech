@@ -3,7 +3,7 @@ import express from "express";
 import {register,viewUser,updateUser,getAllStudents,getAllInstructors,registerUserByAdmin,getStudent
 } from "../Controller/userController.js";
 
-import authMiddleware, {verifyAccessToken, isAdmin} from "../Middlewares/authMiddleware.js";
+import  {verifyAccessToken, isAdmin} from "../Middlewares/authMiddleware.js";
 
 import RegistrationSchema from "../Schema/RegistrationSchema.js";
 
@@ -24,7 +24,7 @@ userRoute.post(
 
 userRoute.get(
     "/view",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     viewUser
 );
@@ -32,7 +32,7 @@ userRoute.get(
 
 userRoute.put(
     "/update",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     updateUser
 );
@@ -40,13 +40,13 @@ userRoute.put(
 
 userRoute.get(
     "/students-list",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     getAllStudents
 );
 userRoute.get(
     "/instructors-list",
-    authMiddleware,
+    verifyAccessToken,
     isAdmin,
     getAllInstructors
 );
@@ -59,6 +59,6 @@ userRoute.post(
 
 userRoute.get(
     "/student",
-    authMiddleware,
+    verifyAccessToken,
     getStudent
 );
